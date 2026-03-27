@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D0RKER // Google Hacking GUI</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <span class="logo-bracket">[</span>
+      D0RKER
+      <span class="logo-bracket">]</span>
+    </div>
+    <div class="header-stats">
+      <div class="stat-item">
+        <span style="font-size:9px;letter-spacing:2px;">STATUS</span>
+        <span class="stat-val">READY<span class="blink">_</span></span>
+      </div>
+      <div class="stat-item">
+        <span style="font-size:9px;letter-spacing:2px;">QUERIES</span>
+        <span class="stat-val" id="queryCount">0</span>
+      </div>
+      <div class="stat-item">
+        <span style="font-size:9px;letter-spacing:2px;">ENGINE</span>
+        <span class="stat-val" id="engineLabel">GOOGLE</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="section-label">// OPERATORS</div>
+    <div class="operator-grid">
+      <button class="op-btn" onclick="insertOp('site:')">
+        <span class="op-name">site:</span>
+        <span class="op-desc">Specific domain</span>
+      </button>
+      <button class="op-btn" onclick="insertOp('inurl:')">
+        <span class="op-name">inurl:</span>
+        <span class="op-desc">URL contains</span>
+      </button>
+      <button class="op-btn" onclick="insertOp('intitle:')">
+        <span class="op-name">intitle:</span>
+        <span class="op-desc">Page title</span>
+      </button>
+      <button class="op-btn" onclick="insertOp('intext:')">
+        <span class="op-name">intext:</span>
+        <span class="op-desc">Body text</span>
+      </button>
+      <button class="op-btn" onclick="insertOp('filetype:')">
+        <span class="op-name">filetype:</span>
+        <span class="op-desc">File extension</span>
+      </button>
+      <button class="op-btn" onclick="insertOp('ext:')">
+        <span class="op-name">ext:</span>
+        <span class="op-desc">Extension alias</span>
+      </button>
+      <button class="op-btn" onclick="insertOp('cache:')">
+        <span class="op-name">cache:</span>
+        <span class="op-desc">Cached version</span>
+      </button>
+      <button class="op-btn" onclick="insertOp('link:')">
+        <span class="op-name">link:</span>
+        <span class="op-desc">Links to URL</span>
+      </button>
+      <button class="op-btn" onclick="insertOp('inanchor:')">
+        <span class="op-name">inanchor:</span>
+        <span class="op-desc">Link anchor text</span>
+      </button>
+      <button class="op-btn" onclick="insertOp('allinurl:')">
+        <span class="op-name">allinurl:</span>
+        <span class="op-desc">All terms in URL</span>
+      </button>
+      <button class="op-btn" onclick="insertOp('allintitle:')">
+        <span class="op-name">allintitle:</span>
+        <span class="op-desc">All terms in title</span>
+      </button>
+      <button class="op-btn" onclick="insertOp('allintext:')">
+        <span class="op-name">allintext:</span>
+        <span class="op-desc">All terms in body</span>
+      </button>
+      <button class="op-btn" onclick="insertOp('related:')">
+        <span class="op-name">related:</span>
+        <span class="op-desc">Similar sites</span>
+      </button>
+      <button class="op-btn" onclick="insertOp('info:')">
+        <span class="op-name">info:</span>
+        <span class="op-desc">Site info</span>
+      </button>
+      <button class="op-btn" onclick="insertOp('define:')">
+        <span class="op-name">define:</span>
+        <span class="op-desc">Definition</span>
+      </button>
+      <button class="op-btn" onclick="insertOp('OR ')">
+        <span class="op-name">OR / AND</span>
+        <span class="op-desc">Logic operators</span>
+      </button>
+      <button class="op-btn" onclick="insertOp('-')">
+        <span class="op-name">- (minus)</span>
+        <span class="op-desc">Exclude term</span>
+      </button>
+      <button class="op-btn" onclick='insertOp("&quot;&quot;")'>
+        <span class="op-name">"quotes"</span>
+        <span class="op-desc">Exact phrase</span>
+      </button>
+    </div>
+
+    <div class="section-label">// QUICK DORKS</div>
+    <div class="template-list">
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} filetype:pdf')">
+        <span class="tpl-tag tag-cyan">INFO</span>PDF documents
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} filetype:xls OR filetype:xlsx OR filetype:csv')">
+        <span class="tpl-tag tag-cyan">INFO</span>Spreadsheet files
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} inurl:admin')">
+        <span class="tpl-tag tag-amber">ADMIN</span>Admin panels
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} inurl:login')">
+        <span class="tpl-tag tag-amber">ADMIN</span>Login pages
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} inurl:wp-admin')">
+        <span class="tpl-tag tag-amber">ADMIN</span>WordPress admin
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} inurl:phpmyadmin')">
+        <span class="tpl-tag tag-amber">ADMIN</span>phpMyAdmin
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} intitle:&quot;index of&quot;')">
+        <span class="tpl-tag tag-red">EXPOSE</span>Open directories
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} intitle:&quot;index of&quot; password')">
+        <span class="tpl-tag tag-red">EXPOSE</span>Password files
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} ext:env OR ext:cfg OR ext:conf')">
+        <span class="tpl-tag tag-red">CONFIG</span>Config files
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} ext:sql OR ext:db OR ext:sqlite')">
+        <span class="tpl-tag tag-red">DB</span>Database files
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} inurl:api OR inurl:api/v1 OR inurl:api/v2')">
+        <span class="tpl-tag tag-cyan">API</span>API endpoints
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} inurl:swagger OR inurl:api-docs')">
+        <span class="tpl-tag tag-cyan">API</span>Swagger / API docs
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} intext:&quot;sql syntax&quot; OR intext:&quot;mysql error&quot;')">
+        <span class="tpl-tag tag-red">ERROR</span>SQL errors
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} intext:&quot;Warning: mysql&quot; OR intext:&quot;PHP Parse error&quot;')">
+        <span class="tpl-tag tag-red">ERROR</span>PHP errors
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} filetype:log')">
+        <span class="tpl-tag tag-red">LOG</span>Log files
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} inurl:backup OR inurl:bak')">
+        <span class="tpl-tag tag-red">BACKUP</span>Backup files
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} ext:bak OR ext:old OR ext:backup')">
+        <span class="tpl-tag tag-red">BACKUP</span>Backup extensions
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} inurl:upload OR inurl:uploads')">
+        <span class="tpl-tag tag-amber">UPLOAD</span>Upload directories
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('intext:&quot;@{target}&quot; filetype:xls')">
+        <span class="tpl-tag tag-cyan">EMAIL</span>Email in XLS
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} inurl:git OR inurl:.git')">
+        <span class="tpl-tag tag-red">GIT</span>Exposed .git
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('site:{target} ext:php intitle:&quot;phpinfo&quot;')">
+        <span class="tpl-tag tag-red">INFO</span>phpinfo() pages
+      </button>
+      <button class="tpl-btn" onclick="loadTemplate('inurl:&quot;{target}&quot; site:pastebin.com')">
+        <span class="tpl-tag tag-amber">PASTE</span>Pastebin leaks
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="warning">
+      <span class="warning-icon">⚠</span>
+      USE ON AUTHORISED TARGETS ONLY — Unauthorised access is illegal. For education and CTF/bug bounty with scope only.
+    </div>
+
+    <!-- QUERY BUILDER -->
+    <div class="query-builder">
+      <div class="qb-header">
+        <span class="qb-title">// QUERY BUILDER</span>
+        <select id="engineSelect" style="width:auto;font-size:11px;padding:4px 8px;" onchange="updateEngine()">
+          <option value="google">Google</option>
+          <option value="bing">Bing</option>
+          <option value="duckduckgo">DuckDuckGo</option>
+          <option value="shodan">Shodan</option>
+        </select>
+      </div>
+      <div class="qb-body">
+
+        <div class="input-row">
+          <span class="input-label">target domain</span>
+          <div class="field-wrap has-prefix">
+            <span class="field-prefix">@</span>
+            <input type="text" id="targetInput" placeholder="example.com" oninput="buildQuery()">
+          </div>
+        </div>
+
+        <div class="input-row">
+          <span class="input-label">raw dork / extra</span>
+          <div class="field-wrap">
+            <input type="text" id="rawInput" placeholder='filetype:pdf intext:"confidential"' oninput="buildQuery()">
+          </div>
+        </div>
+
+        <div class="input-row">
+          <span class="input-label">exclude terms</span>
+          <div class="field-wrap has-prefix">
+            <span class="field-prefix">-</span>
+            <input type="text" id="excludeInput" placeholder="spam ads" oninput="buildQuery()">
+          </div>
+        </div>
+
+        <div class="input-row">
+          <span class="input-label">exact phrase</span>
+          <div class="field-wrap has-prefix">
+            <span class="field-prefix">"</span>
+            <input type="text" id="phraseInput" placeholder="internal use only" oninput="buildQuery()">
+          </div>
+        </div>
+
+        <div id="queryPreview" class="query-preview query-empty">build your dork above or select a template ←</div>
+
+        <div class="action-row">
+          <button class="btn btn-primary" onclick="launchSearch()">▶ LAUNCH SEARCH</button>
+          <button class="btn btn-secondary" onclick="copyQuery()">⎘ COPY QUERY</button>
+          <button class="btn btn-secondary" onclick="saveToHistory()">⊕ SAVE</button>
+          <button class="btn btn-danger" onclick="clearAll()">✕ CLEAR</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- EXTRA OPERATORS -->
+    <div class="operators-panel">
+      <div class="op-panel-header" onclick="togglePanel(this)">
+        <span class="toggle-arrow">▶</span>
+        <span class="op-panel-title">// ADVANCED OPERATORS &amp; COMBOS</span>
+      </div>
+      <div class="op-panel-body">
+        <button class="op-chip" onclick="appendRaw('intitle:&quot;index of&quot; &quot;.env&quot;')"><span class="chip-key">env</span> exposed .env</button>
+        <button class="op-chip" onclick="appendRaw('inurl:/wp-content/uploads/ filetype:php')"><span class="chip-key">wp</span> WP shell upload</button>
+        <button class="op-chip" onclick="appendRaw('intext:&quot;root:x:0:0&quot; filetype:txt')"><span class="chip-key">etc</span> /etc/passwd</button>
+        <button class="op-chip" onclick="appendRaw('intitle:&quot;Metasploitable2&quot;')"><span class="chip-key">msf</span> Metasploitable</button>
+        <button class="op-chip" onclick="appendRaw('inurl:&quot;ViewerFrame?Mode=&quot;')"><span class="chip-key">cam</span> open cameras</button>
+        <button class="op-chip" onclick="appendRaw('intitle:&quot;RouterOS&quot; inurl:&quot;winbox&quot;')"><span class="chip-key">net</span> MikroTik</button>
+        <button class="op-chip" onclick="appendRaw('intext:&quot;api_key&quot; OR intext:&quot;api_secret&quot; filetype:txt')"><span class="chip-key">key</span> API keys in txt</button>
+        <button class="op-chip" onclick="appendRaw('ext:pem intext:&quot;PRIVATE KEY&quot;')"><span class="chip-key">ssl</span> private keys</button>
+        <button class="op-chip" onclick="appendRaw('ext:xml intext:&quot;connectionString&quot;')"><span class="chip-key">db</span> DB conn strings</button>
+        <button class="op-chip" onclick="appendRaw('intitle:&quot;Cisco IOS&quot; inurl:exec')"><span class="chip-key">cisco</span> Cisco IOS</button>
+        <button class="op-chip" onclick="appendRaw('inurl:&quot;/jenkins&quot; intitle:&quot;Dashboard&quot;')"><span class="chip-key">ci</span> Jenkins</button>
+        <button class="op-chip" onclick="appendRaw('inurl:&quot;:8080/manager/html&quot;')"><span class="chip-key">tc</span> Tomcat manager</button>
+        <button class="op-chip" onclick="appendRaw('intext:&quot;Index of /&quot; inurl:ftp')"><span class="chip-key">ftp</span> open FTP index</button>
+        <button class="op-chip" onclick="appendRaw('filetype:ovpn intext:&quot;remote&quot;')"><span class="chip-key">vpn</span> VPN configs</button>
+        <button class="op-chip" onclick="appendRaw('ext:rd intext:&quot;full address&quot;')"><span class="chip-key">rdp</span> RDP files</button>
+        <button class="op-chip" onclick="appendRaw('inurl:&quot;.git&quot; intitle:&quot;Index of&quot;')"><span class="chip-key">git</span> .git exposed</button>
+        <button class="op-chip" onclick="appendRaw('intext:&quot;BEGIN RSA PRIVATE KEY&quot;')"><span class="chip-key">rsa</span> RSA keys</button>
+        <button class="op-chip" onclick="appendRaw('intext:&quot;DB_PASSWORD&quot; filetype:env')"><span class="chip-key">db</span> .env passwords</button>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="history-panel">
+      <div class="history-header">
+        <span class="history-title">// QUERY HISTORY</span>
+        <button class="clear-btn" onclick="clearHistory()">CLEAR ALL</button>
+      </div>
+      <div class="history-list" id="historyList">
+        <div class="history-empty">[ no queries saved yet ]</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
